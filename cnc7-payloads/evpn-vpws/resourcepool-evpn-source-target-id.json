@@ -1,0 +1,15 @@
+{
+  "resource-allocator:resource-pools": {
+    "id-allocator:id-pool": [
+      {
+        "name": "evi-source-target-pool",
+        "range": {
+          "start": 1,
+          "end": 400
+        },
+        "allocation": [
+        ]
+      }
+    ]
+  }
+}

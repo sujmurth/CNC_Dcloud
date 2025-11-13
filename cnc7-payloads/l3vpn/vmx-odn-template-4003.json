@@ -1,0 +1,28 @@
+{
+  "cisco-sr-te-cfp:sr-te" : {
+  "cisco-sr-te-cfp-sr-odn:odn": {
+  "odn-template": {
+    "name": "odn_c_4003",
+    "color": 4003,
+    "dynamic": {
+      "pce": {},
+      "metric-type": "te"
+    },
+    "head-end": [
+      {
+        "name": "Node-3"
+      },
+      {
+        "name": "Node-4"
+      },
+      {
+        "name": "Node-5"
+      },
+      {
+        "name": "vmx99"
+      }
+    ]
+  }
+}
+}
+}

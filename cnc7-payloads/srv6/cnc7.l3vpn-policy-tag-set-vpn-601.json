@@ -1,0 +1,14 @@
+{
+"cisco-l3vpn-routing-policy:l3vpn-routing-policy": {
+      "defined-sets": {
+        "tag-sets": {
+          "tag-set": [
+            {
+              "name": "VPN-601-EXTCOMM-SET",
+              "tag-value": [6003]
+            }
+          ]
+        }
+      }
+    }
+}

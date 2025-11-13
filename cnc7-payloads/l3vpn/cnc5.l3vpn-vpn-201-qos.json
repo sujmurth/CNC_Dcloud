@@ -1,0 +1,294 @@
+{
+    "ietf-l3vpn-ntw:l3vpn-ntw": {
+        "vpn-services": {
+            "vpn-service": {
+                "vpn-id": "vpn-201",
+                "vpn-nodes": {
+                    "vpn-node": [
+                        {
+                            "vpn-node-id": "Node-3",
+                            "vpn-network-accesses": {
+                                "vpn-network-access": [
+                                    {
+                                        "id": "3-ac3",
+                                        "service": {
+                                            "qos": {
+                                                "qos-profile": {
+                                                    "qos-profile": [
+                                                        {
+                                                            "profile": "Egress-High_Bw_Apps",
+                                                            "direction": "ietf-vpn-common:site-to-wan"
+                                                        },
+                                                        {
+                                                            "profile": "ingress_COS1",
+                                                            "direction": "ietf-vpn-common:wan-to-site"
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "connection": {
+                                            "encapsulation": {
+                                                "type": "ietf-vpn-common:dot1q",
+                                                "dot1q": {
+                                                    "cvlan-id": 201
+                                                }
+                                            }
+                                        },
+                                        "interface-id": "GigabitEthernet0/0/0/2",
+                                        "ip-connection": {
+                                            "ipv4": {
+                                                "local-address": "30.1.3.1",
+                                                "prefix-length": 24
+                                            }
+                                        },
+                                        "routing-protocols": {
+                                            "routing-protocol": [
+                                                {
+                                                    "id": "0",
+                                                    "bgp": {
+                                                        "peer-as": 65000,
+                                                        "neighbor": [
+                                                            "30.1.3.2"
+                                                        ],
+                                                        "address-family": "ipv4",
+                                                        "redistribute-connected": [
+                                                            {
+                                                                "enable": true,
+                                                                "address-family": "ietf-vpn-common:ipv4"
+                                                            }
+                                                        ],
+                                                        "cisco-l3vpn-ntw:mpls-deactivation": false
+                                                    },
+                                                    "type": "ietf-vpn-common:bgp-routing"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            },
+                            "active-vpn-instance-profiles": {
+                                "vpn-instance-profile": [
+                                    {
+                                        "profile-id": "default",
+                                        "address-family": [
+                                            {
+                                                "vpn-targets": {
+                                                    "vpn-policies": {
+                                                        "export-policy": "VPN-201-POLICY"
+                                                    }
+                                                },
+                                                "address-family": "ietf-vpn-common:ipv4"
+                                            },
+                                            {
+                                                "vpn-targets": {
+                                                    "vpn-policies": {
+                                                        "export-policy": "VPN-201-POLICY"
+                                                    }
+                                                },
+                                                "address-family": "ietf-vpn-common:ipv6"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "vpn-node-id": "Node-4",
+                            "vpn-network-accesses": {
+                                "vpn-network-access": [
+                                    {
+                                        "id": "2-ac2",
+                                        "service": {
+                                            "qos": {
+                                                "qos-profile": {
+                                                    "qos-profile": [
+                                                        {
+                                                            "profile": "Egress-High_Bw_Apps",
+                                                            "direction": "ietf-vpn-common:site-to-wan"
+                                                        },
+                                                        {
+                                                            "profile": "ingress_COS1",
+                                                            "direction": "ietf-vpn-common:wan-to-site"
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "connection": {
+                                            "encapsulation": {
+                                                "type": "ietf-vpn-common:dot1q",
+                                                "dot1q": {
+                                                    "cvlan-id": 201
+                                                }
+                                            }
+                                        },
+                                        "interface-id": "GigabitEthernet0/0/0/1",
+                                        "ip-connection": {
+                                            "ipv4": {
+                                                "local-address": "30.1.4.1",
+                                                "prefix-length": 24
+                                            }
+                                        },
+                                        "routing-protocols": {
+                                            "routing-protocol": [
+                                                {
+                                                    "id": "0",
+                                                    "bgp": {
+                                                        "peer-as": 65003,
+                                                        "neighbor": [
+                                                            "30.1.4.2"
+                                                        ],
+                                                        "address-family": "ipv4",
+                                                        "redistribute-connected": [
+                                                            {
+                                                                "enable": true,
+                                                                "address-family": "ietf-vpn-common:ipv4"
+                                                            }
+                                                        ],
+                                                        "cisco-l3vpn-ntw:mpls-deactivation": false
+                                                    },
+                                                    "type": "ietf-vpn-common:bgp-routing"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            },
+                            "active-vpn-instance-profiles": {
+                                "vpn-instance-profile": [
+                                    {
+                                        "profile-id": "default",
+                                        "address-family": [
+                                            {
+                                                "vpn-targets": {
+                                                    "vpn-policies": {
+                                                        "export-policy": "VPN-201-POLICY"
+                                                    }
+                                                },
+                                                "address-family": "ietf-vpn-common:ipv4"
+                                            },
+                                            {
+                                                "vpn-targets": {
+                                                    "vpn-policies": {
+                                                        "export-policy": "VPN-201-POLICY"
+                                                    }
+                                                },
+                                                "address-family": "ietf-vpn-common:ipv6"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "vpn-node-id": "Node-5",
+                            "vpn-network-accesses": {
+                                "vpn-network-access": [
+                                    {
+                                        "id": "1-ac1",
+                                        "service": {
+                                            "qos": {
+                                                "qos-profile": {
+                                                    "qos-profile": [
+                                                        {
+                                                            "profile": "Egress-High_Bw_Apps",
+                                                            "direction": "ietf-vpn-common:site-to-wan"
+                                                        },
+                                                        {
+                                                            "profile": "ingress_COS1",
+                                                            "direction": "ietf-vpn-common:wan-to-site"
+                                                        }
+                                                    ]
+                                                }
+                                            }
+                                        },
+                                        "connection": {
+                                            "encapsulation": {
+                                                "type": "ietf-vpn-common:dot1q",
+                                                "dot1q": {
+                                                    "cvlan-id": 201
+                                                }
+                                            }
+                                        },
+                                        "interface-id": "GigabitEthernet0/0/0/1",
+                                        "ip-connection": {
+                                            "ipv4": {
+                                                "local-address": "30.1.5.1",
+                                                "prefix-length": 24
+                                            }
+                                        },
+                                        "routing-protocols": {
+                                            "routing-protocol": [
+                                                {
+                                                    "id": "0",
+                                                    "bgp": {
+                                                        "peer-as": 65003,
+                                                        "neighbor": [
+                                                            "30.1.5.2"
+                                                        ],
+                                                        "address-family": "ipv4",
+                                                        "redistribute-connected": [
+                                                            {
+                                                                "enable": true,
+                                                                "address-family": "ietf-vpn-common:ipv4"
+                                                            }
+                                                        ],
+                                                        "cisco-l3vpn-ntw:mpls-deactivation": false
+                                                    },
+                                                    "type": "ietf-vpn-common:bgp-routing"
+                                                }
+                                            ]
+                                        }
+                                    }
+                                ]
+                            },
+                            "active-vpn-instance-profiles": {
+                                "vpn-instance-profile": [
+                                    {
+                                        "profile-id": "default",
+                                        "address-family": [
+                                            {
+                                                "vpn-targets": {
+                                                    "vpn-policies": {
+                                                        "export-policy": "VPN-201-POLICY"
+                                                    }
+                                                },
+                                                "address-family": "ietf-vpn-common:ipv4"
+                                            },
+                                            {
+                                                "vpn-targets": {
+                                                    "vpn-policies": {
+                                                        "export-policy": "VPN-201-POLICY"
+                                                    }
+                                                },
+                                                "address-family": "ietf-vpn-common:ipv6"
+                                            }
+                                        ]
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "vpn-service-topology": "ietf-vpn-common:any-to-any",
+                "vpn-instance-profiles": {
+                    "vpn-instance-profile": [
+                        {
+                            "profile-id": "default"
+                        }
+                    ]
+                },
+                "cisco-l3vpn-ntw:vpn-target": {
+                    "hub-rt-value": "0:201:201"
+                },
+                "cisco-l3vpn-ntw:service-assurance": {
+                    "rule-name": "Rule-L3VPN-NM system",
+                    "preservation": "remove",
+                    "profile-name": "Gold_L3VPN_ConfigProfile system",
+                    "monitoring-state": "disable"
+                }
+            }
+        }
+    }
+}

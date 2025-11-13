@@ -1,0 +1,31 @@
+{
+    "cisco-sr-te-cfp:sr-te": {
+        "cisco-sr-te-cfp-sr-policies:policies": {
+            "cisco-sr-te-cfp-sr-policies:policy": {
+                "name": "4-2-6101",
+                "path": [
+                    {
+                        "dynamic": {
+                            "pce": {},
+                            "metric-type": "igp"
+                        },
+                        "preference": 101
+                    }
+                ],
+                "srv6": {
+                    "locator": {
+                        "behavior": "ub6-insert-reduced",
+                        "locator-name": "MAIN"
+                    }
+                },
+                "color": 6101,
+                "head-end": [
+                    {
+                        "name": "node-4"
+                    }
+                ],
+                "tail-end": "2010::2"
+            }
+        }
+    }
+}

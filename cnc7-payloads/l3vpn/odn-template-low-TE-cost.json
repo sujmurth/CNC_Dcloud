@@ -1,0 +1,25 @@
+{
+  "cisco-sr-te-cfp:sr-te": {
+    "cisco-sr-te-cfp-sr-odn:odn": {
+      "odn-template": {
+        "name": "odn_low_te_cost_4002",
+        "color": 4002,
+        "dynamic": {
+          "pce": {},
+          "metric-type": "te"
+        },
+        "head-end": [
+          {
+            "name": "node-1"
+          },
+          {
+            "name": "node-2"
+          },
+          {
+            "name": "node-3"
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+    "cisco-flat-L2vpn-fp:l2vpn-route-policy": [
+        {
+            "name": "evpn-top-4129-l2vpn-policy",
+            "color": [
+                {
+                    "id": 4129,
+                    "ipv4": {
+                        "rd": [
+                            "198.19.1.4:4129",
+                            "198.19.1.5:4129"
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}

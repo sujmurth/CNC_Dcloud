@@ -1,0 +1,105 @@
+{
+    "ietf-l2vpn-ntw:l2vpn-ntw": {
+        "vpn-services": {
+            "vpn-service": {
+                "vpn-id": "l2vpn-tldp-1002",
+                "vpn-nodes": {
+                    "vpn-node": [
+                        {
+                            "ne-id": "Node-2",
+                            "vpn-node-id": "Node-2",
+                            "signaling-options": [
+                                {
+                                    "type": "vpn-common:t-ldp",
+                                    "t-ldp-pwe": {
+                                        "ac-pw-list": [
+                                            {
+                                                "vc-id": "1002",
+                                                "peer-addr": "198.19.1.5",
+                                                "mpls-label": 1002
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "vpn-network-accesses": {
+                                "vpn-network-access": [
+                                    {
+                                        "id": "l2vpn-p2p-ac1002",
+                                        "connection": {
+                                            "dot1q-interface": {
+                                                "dot1q": {
+                                                    "rewrite": {
+                                                        "ingress": {
+                                                            "mode": "symmetric",
+                                                            "push": [
+                                                                null
+                                                            ],
+                                                            "dot1q": 1002
+                                                        }
+                                                    },
+                                                    "c-vlan-id": 1002,
+                                                    "physical-inf": "GigabitEthernet4"
+                                                },
+                                                "l2-access-type": "vpn-common:dot1q"
+                                            },
+                                            "encapsulation-type": "vpn-common:dot1q"
+                                        },
+                                        "Interface-mtu": 1500
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "ne-id": "Node-5",
+                            "vpn-node-id": "Node-5",
+                            "signaling-options": [
+                                {
+                                    "type": "vpn-common:t-ldp",
+                                    "t-ldp-pwe": {
+                                        "ac-pw-list": [
+                                            {
+                                                "vc-id": "1002",
+                                                "peer-addr": "198.19.1.2",
+                                                "mpls-label": 1002
+                                            }
+                                        ]
+                                    }
+                                }
+                            ],
+                            "vpn-network-accesses": {
+                                "vpn-network-access": [
+                                    {
+                                        "id": "l2vpn-p2p-ac1002",
+                                        "connection": {
+                                            "dot1q-interface": {
+                                                "dot1q": {
+                                                    "rewrite": {
+                                                        "ingress": {
+                                                            "mode": "symmetric",
+                                                            "push": [
+                                                                null
+                                                            ],
+                                                            "dot1q": 1002
+                                                        }
+                                                    },
+                                                    "c-vlan-id": 1002,
+                                                    "physical-inf": "GigabitEthernet0/0/0/1"
+                                                },
+                                                "l2-access-type": "vpn-common:dot1q"
+                                            },
+                                            "encapsulation-type": "vpn-common:dot1q"
+                                        },
+                                        "Interface-mtu": 1500
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "control-word": "yes",
+                "vpn-svc-type": "vpn-common:t-ldp"
+            }
+        }
+    }
+}

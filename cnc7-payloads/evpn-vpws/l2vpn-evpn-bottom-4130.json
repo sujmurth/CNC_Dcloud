@@ -1,0 +1,99 @@
+{
+    "ietf-l2vpn-ntw:l2vpn-ntw": {
+        "vpn-services": {
+            "vpn-service": {
+                "evi-id": 4130,
+                "vpn-id": "l2vpn-evpn-4130",
+                "vpn-nodes": {
+                    "vpn-node": [
+                        {
+                            "ne-id": "Node-4",
+                            "vpn-node-id": "Node-4",
+                            "signaling-options": [
+                                {
+                                    "type": "vpn-common:evpn-bgp",
+                                    "evpn-bgp": {
+                                        "type": "evpn-vpws"
+                                    }
+                                }
+                            ],
+                            "te-service-mapping": {
+                                "te-mapping": {
+                                    "odn": {
+                                        "attach-point": {
+                                            "parent-rr-route-policy": "SET_COLOR_EVPN_VPWS"
+                                        },
+                                        "route-policy": "evpn-bottom-4130-l2vpn-policy"
+                                    }
+                                }
+                            },
+                            "vpn-network-accesses": {
+                                "vpn-network-access": [
+                                    {
+                                        "id": "epvn1-ac",
+                                        "connection": {
+                                            "dot1q-interface": {
+                                                "dot1q": {
+                                                    "c-vlan-id": 2130,
+                                                    "physical-inf": "GigabitEthernet0/0/0/1"
+                                                },
+                                                "l2-access-type": "vpn-common:dot1q"
+                                            },
+                                            "encapsulation-type": "vpn-common:dot1q"
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                        {
+                            "ne-id": "Node-5",
+                            "vpn-node-id": "Node-5",
+                            "signaling-options": [
+                                {
+                                    "type": "vpn-common:evpn-bgp",
+                                    "evpn-bgp": {
+                                        "type": "evpn-vpws"
+                                    }
+                                }
+                            ],
+                            "te-service-mapping": {
+                                "te-mapping": {
+                                    "odn": {
+                                        "attach-point": {
+                                            "parent-rr-route-policy": "SET_COLOR_EVPN_VPWS"
+                                        },
+                                        "route-policy": "evpn-bottom-4130-l2vpn-policy"
+                                    }
+                                }
+                            },
+                            "vpn-network-accesses": {
+                                "vpn-network-access": [
+                                    {
+                                        "id": "evpn-ac1",
+                                        "connection": {
+                                            "dot1q-interface": {
+                                                "dot1q": {
+                                                    "c-vlan-id": 2130,
+                                                    "physical-inf": "GigabitEthernet0/0/0/1"
+                                                },
+                                                "l2-access-type": "vpn-common:dot1q"
+                                            },
+                                            "encapsulation-type": "vpn-common:dot1q"
+                                        }
+                                    }
+                                ]
+                            }
+                        }
+                    ]
+                },
+                "vpn-svc-type": "vpn-common:evpn-bgp",
+                "auto-evi-source": [
+                    null
+                ],
+                "auto-evi-target": [
+                    null
+                ]
+            }
+        }
+    }
+}

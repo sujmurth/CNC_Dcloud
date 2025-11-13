@@ -1,0 +1,23 @@
+{
+    "cisco-sr-te-cfp:sr-te": {
+        "cisco-sr-te-cfp-sr-odn:odn": {
+            "odn-template": {
+                "name": "odn_flexalgo_bottom_4130",
+                "color": 4130,
+                "dynamic": {
+                    "pce": {},
+                    "flex-alg": 130,
+                    "metric-type": "te"
+                },
+                "head-end": [
+                    {
+                        "name": "node-4"
+                    },
+                    {
+                        "name": "node-2"
+                    }
+                ]
+            }
+        }
+}
+}

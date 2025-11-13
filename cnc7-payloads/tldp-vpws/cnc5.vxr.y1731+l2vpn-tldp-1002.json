@@ -1,0 +1,155 @@
+{
+  "ietf-l2vpn-ntw:l2vpn-ntw": {
+    "vpn-services": {
+      "vpn-service": [
+        {
+          "vpn-id": "l2vpn-tldp-1002",
+          "vpn-type": "ietf-vpn-common:vpws",
+          "vpn-nodes": {
+            "vpn-node": [
+              {
+                "vpn-node-id": "Node-4",
+                "signaling-option": {
+                  "ldp-or-l2tp": {
+                    "pw-peer-list": [
+                      {
+                        "vc-id": 1002,
+                        "peer-addr": "198.19.1.5"
+                      }
+                    ]
+                  }
+                },
+                "vpn-network-accesses": {
+                  "vpn-network-access": [
+                    {
+                      "id": "1",
+                      "connection": {
+                        "encapsulation": {
+                          "dot1q": {
+                            "cvlan-id": 1002
+                          },
+                          "encap-type": "ietf-vpn-common:dot1q"
+                        }
+                      },
+                      "interface-id": "HundredGigE0/0/0/1",
+                      "ethernet-service-oam": {
+                        "y-1731": [
+                          {
+                            "maid": "null",
+                            "mep-id": 4,
+                            "message-period": "1s",
+                            "cisco-l2vpn-ntw:id-type": "icc-based",
+                            "cisco-l2vpn-ntw:y-1731-profile": [
+                              {
+                                "name": "Delay",
+                                "schedule": {
+                                  "duration": 5,
+                                  "interval": 5
+                                }
+                              },
+                              {
+                                "name": "test-loss",
+                                "schedule": {
+                                  "duration": 5,
+                                  "interval": 5
+                                }
+                              }
+                            ]
+                          }
+                        ],
+                        "md-name": "l2vpn-tldp-1002",
+                        "md-level": 4
+                      }
+                    }
+                  ]
+                },
+                "cisco-l2vpn-ntw:te-service-mapping": {
+                  "te-mapping": {
+                    "sr-policy": {
+                      "policy": "srte_c_2003_ep_198.19.1.5",
+                      "fallback": "disable",
+                      "policy-type": "policy"
+                    }
+                  }
+                }
+              },
+              {
+                "vpn-node-id": "Node-5",
+                "signaling-option": {
+                  "ldp-or-l2tp": {
+                    "pw-peer-list": [
+                      {
+                        "vc-id": 1002,
+                        "peer-addr": "198.19.1.4"
+                      }
+                    ]
+                  }
+                },
+                "vpn-network-accesses": {
+                  "vpn-network-access": [
+                    {
+                      "id": "2",
+                      "connection": {
+                        "encapsulation": {
+                          "dot1q": {
+                            "cvlan-id": 1002
+                          },
+                          "encap-type": "ietf-vpn-common:dot1q"
+                        }
+                      },
+                      "interface-id": "HundredGigE0/0/0/1",
+                      "ethernet-service-oam": {
+                        "y-1731": [
+                          {
+                            "maid": "null",
+                            "mep-id": 5,
+                            "message-period": "1s",
+                            "cisco-l2vpn-ntw:id-type": "icc-based",
+                            "cisco-l2vpn-ntw:y-1731-profile": [
+                              {
+                                "name": "Delay",
+                                "schedule": {
+                                  "duration": 5,
+                                  "interval": 5
+                                }
+                              },
+                              {
+                                "name": "test-loss",
+                                "schedule": {
+                                  "duration": 5,
+                                  "interval": 5
+                                }
+                              }
+                            ]
+                          }
+                        ],
+                        "md-name": "l2vpn-tldp-1002",
+                        "md-level": 4
+                      }
+                    }
+                  ]
+                },
+                "cisco-l2vpn-ntw:te-service-mapping": {
+                  "te-mapping": {
+                    "sr-policy": {
+                      "policy": "srte_c_2003_ep_198.19.1.4",
+                      "fallback": "disable",
+                      "policy-type": "policy"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "cisco-l2vpn-ntw:control-word": "yes",
+          "cisco-l2vpn-ntw:service-assurance": {
+            "rule-name": "Rule-L2VPN-NM-P2P system",
+            "preservation": "remove",
+            "profile-name": "Gold_L2VPN_ConfigProfile system",
+            "monitoring-state": "disable"
+          }
+        }
+      ]
+    }
+  }
+}

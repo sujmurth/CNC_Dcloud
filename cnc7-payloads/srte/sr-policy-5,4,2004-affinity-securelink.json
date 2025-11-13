@@ -1,0 +1,39 @@
+{
+    "cisco-sr-te-cfp:sr-te": {
+        "cisco-sr-te-cfp-sr-policies:policies": {
+            "policy": [
+                {
+                    "name": "srte_c_2004_ep_198.19.1.4",
+                    "head-end": [
+                        {
+                            "name": "Node-5"
+                        }
+                    ],
+                    "tail-end": "198.19.1.4",
+                    "color": 2004,
+                    "path": [
+                        {
+                            "preference": 101,
+                            "dynamic": {
+                                "metric-type": "igp",
+                                "pce": "",
+                                "constraints": {
+                                    "affinity": {
+                                        "rule": [
+                                            {
+                                                "color": [
+                                                    "securelink"
+                                                ],
+                                                "action": "include-all"
+                                            }
+                                        ]
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}

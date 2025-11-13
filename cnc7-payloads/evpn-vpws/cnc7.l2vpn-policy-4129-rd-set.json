@@ -1,0 +1,17 @@
+{
+  "cisco-l2vpn-routing-policy:l2vpn-routing-policy": {
+    "defined-sets": {
+      "rd-sets": {
+        "rd-set": [
+          {
+            "name": "map-rd-to-color-4129",
+            "rd": [
+              "198.19.1.4:4129",
+              "198.19.1.2:4129"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}

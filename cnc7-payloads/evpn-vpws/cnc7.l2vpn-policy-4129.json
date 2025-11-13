@@ -1,0 +1,30 @@
+{
+  "cisco-l2vpn-routing-policy:l2vpn-routing-policy": {
+    "policy-definitions": {
+      "policy-definition": [
+        {
+          "name": "l2vpn-policy-evpn-4129",
+          "statements": {
+            "statement": [
+              {
+                "name": "1",
+                "conditions": {
+                  "match-rd-set": {
+                    "rd-set": "map-rd-to-color-4129"
+                  }
+                },
+                "actions": {
+                  "bgp-actions": {
+                    "set-ext-community": {
+                      "ext-community-set-ref": "set-color-community-4129"
+                    }
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  }
+}

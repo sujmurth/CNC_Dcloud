@@ -1,0 +1,28 @@
+{
+    "cisco-sr-te-cfp:sr-te": {
+        "cisco-sr-te-cfp-sr-policies:policies": {
+            "policy": [
+                {
+                    "name": "srte_c_777_ep_198.19.1.99",
+                    "head-end": [
+                        {
+                            "name": "Node-4"
+                        }
+                    ],
+                    "tail-end": "198.19.1.99",
+                    "color": 777,
+                    "path": [
+                        {
+                            "preference": 101,
+                            "dynamic": {
+                                "metric-type": "igp",
+                                "pce": ""
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    }
+}
+

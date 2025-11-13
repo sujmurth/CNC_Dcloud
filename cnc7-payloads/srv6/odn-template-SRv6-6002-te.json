@@ -1,0 +1,31 @@
+{
+  "cisco-sr-te-cfp:sr-te": {
+    "cisco-sr-te-cfp-sr-odn:odn": {
+      "odn-template": {
+        "name": "odn_SRv6_te_6002",
+        "color": 6002,
+        "srv6": {
+          "locator": {
+            "behavior": "ub6-insert-reduced",
+            "locator-name": "MAIN"
+          }
+        },
+        "dynamic": {
+          "pce": {},
+          "metric-type": "te"
+        },
+        "head-end": [
+          {
+            "name": "node-3"
+          },
+          {
+            "name": "node-4"
+          },
+          {
+            "name": "node-2"
+          }
+        ]
+      }
+    }
+  }
+}

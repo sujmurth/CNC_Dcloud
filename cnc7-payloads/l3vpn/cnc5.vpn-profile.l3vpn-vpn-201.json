@@ -1,0 +1,13 @@
+{
+  "ietf-l3vpn-ntw:l3vpn-ntw": {
+    "vpn-profiles": {
+      "valid-provider-identifiers": {
+        "routing-profile-identifier": [
+          {
+            "id": "VPN-201-POLICY"
+          }
+        ]
+      }
+    }
+  }
+}

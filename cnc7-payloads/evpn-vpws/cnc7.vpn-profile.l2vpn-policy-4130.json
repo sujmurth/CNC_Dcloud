@@ -1,0 +1,13 @@
+{
+  "ietf-l2vpn-ntw:l2vpn-ntw": {
+    "vpn-profiles": {
+      "valid-provider-identifiers": {
+        "routing-profile-identifier": [
+          {
+            "id": "l2vpn-policy-evpn-4130"
+          }
+        ]
+      }
+    }
+  }
+}

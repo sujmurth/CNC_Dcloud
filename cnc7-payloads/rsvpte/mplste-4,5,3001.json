@@ -1,0 +1,88 @@
+{
+    "ietf-te:te" : { 
+        "tunnels": {
+            "tunnel": [
+        {
+            "name": "IETF-RSVP-TE-3001",
+            "identifier": 3001,
+            "description": "RSVP_TE",
+            "source": "198.19.1.5",
+            "destination": "198.19.1.4",
+            "bidirectional": true,
+            "te-bandwidth": {
+                "generic": "1000"
+            },
+            "setup-priority": 3,
+            "hold-priority": 2,
+            "signaling-type": "te-types:path-setup-rsvp",
+            "p2p-primary-paths": {
+                "p2p-primary-path": [
+                    {
+                        "name": "PATH-1",
+                        "path-computation-method": "ietf-te-types:path-explicitly-defined",
+                        "preference": 1,
+                        "explicit-route-objects-always": {
+                            "route-object-include-exclude": [
+                                {
+                                    "index": 1,
+                                    "numbered-node-hop": {
+                                        "node-id": "198.19.1.8",
+                                        "hop-type": "loose"
+                                    }
+                                },
+                                {
+                                    "index": 2,
+                                    "label-hop": {
+                                        "te-label": {
+                                            "generic": "Afw="
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "name": "PATH-2",
+                        "path-computation-method": "ietf-te-types:path-locally-computed",
+                        "optimizations": {
+                            "optimization-metric": [
+                                {
+                                    "metric-type": "te-types:path-metric-te"
+                                }
+                            ]
+                        },
+                        "preference": 2
+                    },
+                    {
+                        "name": "PATH-3",
+                        "path-computation-method": "ietf-te-types:path-externally-queried",
+                        "optimizations": {
+                            "optimization-metric": [
+                                {
+                                    "metric-type": "te-types:path-metric-te"
+                                }
+                            ]
+                        },
+                        "preference": 3
+                    },
+                    {
+                        "name": "PATH-4",
+                        "path-computation-method": "ietf-te-types:path-externally-queried",
+                        "optimizations": {
+                            "optimization-metric": [
+                                {
+                                    "metric-type": "te-types:path-metric-te"
+                                }
+                            ]
+                        },
+                        "preference": 4
+                    }
+                ]
+            },
+            "head-end": "Node-5",
+            "tail-end": "Node-4"
+        }
+    ]
+}
+}
+}

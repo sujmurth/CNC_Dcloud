@@ -1,0 +1,25 @@
+{
+  "cisco-sr-te-cfp:sr-te": {
+    "cisco-sr-te-cfp-sr-odn:odn": {
+      "odn-template": {
+        "name": "odn_low_latency_4003",
+        "color": 4003,
+        "dynamic": {
+          "pce": {},
+          "metric-type": "latency"
+        },
+        "head-end": [
+          {
+            "name": "node-1"
+          },
+          {
+            "name": "node-2"
+          },
+          {
+            "name": "node-3"
+          }
+        ]
+      }
+    }
+  }
+}

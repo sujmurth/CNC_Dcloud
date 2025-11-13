@@ -1,0 +1,93 @@
+{
+  "ietf-l2vpn-ntw:l2vpn-ntw": {
+    "vpn-services": {
+      "vpn-service": [
+        {
+          "vpn-id": "l2vpn-tldp-1001",
+          "vpn-type": "ietf-vpn-common:vpws",
+          "vpn-nodes": {
+            "vpn-node": [
+              {
+                "vpn-node-id": "Node-4",
+                "signaling-option": {
+                  "ldp-or-l2tp": {
+                    "pw-peer-list": [
+                      {
+                        "peer-addr": "198.19.1.5",
+                        "vc-id": 1001
+                      }
+                    ]
+                  }
+                },
+                "vpn-network-accesses": {
+                  "vpn-network-access": [
+                    {
+                      "id": "1",
+                      "interface-id": "HundredGigE0/0/0/1",
+                      "connection": {
+                        "encapsulation": {
+                          "encap-type": "ietf-vpn-common:dot1q",
+                          "dot1q": {
+                            "cvlan-id": 1001
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "cisco-l2vpn-ntw:te-service-mapping": {
+                  "te-mapping": {
+                    "sr-policy": {
+                      "policy-type": "policy",
+                      "policy": "srte_c_2003_ep_198.19.1.5",
+                      "fallback": "disable"
+                    }
+                  }
+                }
+              },
+              {
+                "vpn-node-id": "Node-5",
+                "signaling-option": {
+                  "ldp-or-l2tp": {
+                    "pw-peer-list": [
+                      {
+                        "peer-addr": "198.19.1.4",
+                        "vc-id": 1001
+                      }
+                    ]
+                  }
+                },
+                "vpn-network-accesses": {
+                  "vpn-network-access": [
+                    {
+                      "id": "2",
+                      "interface-id": "HundredGigE0/0/0/1",
+                      "connection": {
+                        "encapsulation": {
+                          "encap-type": "ietf-vpn-common:dot1q",
+                          "dot1q": {
+                            "cvlan-id": 1001
+                          }
+                        }
+                      }
+                    }
+                  ]
+                },
+                "cisco-l2vpn-ntw:te-service-mapping": {
+                  "te-mapping": {
+                    "sr-policy": {
+                      "policy-type": "policy",
+                      "policy": "srte_c_2003_ep_198.19.1.4",
+                      "fallback": "disable"
+                    }
+                  }
+                }
+              }
+            ]
+          },
+          "cisco-l2vpn-ntw:control-word": "yes"
+        }
+      ]
+    }
+  }
+}

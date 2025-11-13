@@ -1,0 +1,174 @@
+{
+    "ietf-l2vpn-ntw:l2vpn-ntw": {
+        "vpn-services": {
+            "vpn-service": {
+                "vpn-id": "l2vpn-tldp-1001",
+                "vpn-nodes": {
+                    "vpn-node": [
+        {
+          "ne-id": "Node-4",
+          "vpn-node-id": "Node-4",
+          "signaling-options": [
+            {
+              "type": "vpn-common:t-ldp",
+              "t-ldp-pwe": {
+                "ac-pw-list": [
+                  {
+                    "vc-id": "1001",
+                    "peer-addr": "198.19.1.5"
+                  }
+                ]
+              }
+            }
+          ],
+          "te-service-mapping": {
+            "te-mapping": {
+              "sr-policy": {
+                "policy": "srte_c_2003_ep_198.19.1.5"
+              }
+            }
+          },
+          "vpn-network-accesses": {
+            "vpn-network-access": [
+              {
+                "id": "l2vpn-p2p-ac1001",
+                "connection": {
+                  "dot1q-interface": {
+                    "dot1q": {
+                      "rewrite": {
+                        "ingress": {
+                          "mode": "symmetric",
+                          "push": [
+                            null
+                          ],
+                          "dot1q": 1001
+                        }
+                      },
+                      "c-vlan-id": 1001,
+                      "physical-inf": "HundredGigE0/0/0/1"
+                    },
+                    "l2-access-type": "vpn-common:dot1q"
+                  },
+                  "encapsulation-type": "vpn-common:dot1q"
+                },
+                "Interface-mtu": 1500,
+                "ethernet-service-oam": {
+                  "y-1731": [
+                    {
+                      "maid": "null",
+                      "mep-id": 1001,
+                      "ietf-l2vpn-ntw-cisco-augmentations:y-1731-profile": [
+                        {
+                          "name": "Delay",
+                          "schedule": {
+                            "duration": 5,
+                            "interval": 5
+                          }
+                        },
+                        {
+                          "name": "test-loss",
+                          "schedule": {
+                            "duration": 5,
+                            "interval": 5
+                          }
+                        }
+                      ]
+                    }
+                  ],
+                  "md-name": "l2vpn-p2p-ac1001",
+                  "md-level": 4
+                }
+              }
+            ]
+          }
+        },
+        {
+          "ne-id": "Node-5",
+          "vpn-node-id": "Node-5",
+          "signaling-options": [
+            {
+              "type": "vpn-common:t-ldp",
+              "t-ldp-pwe": {
+                "ac-pw-list": [
+                  {
+                    "vc-id": "1001",
+                    "peer-addr": "198.19.1.4"
+                  }
+                ]
+              }
+            }
+          ],
+          "te-service-mapping": {
+            "te-mapping": {
+              "sr-policy": {
+                "policy": "srte_c_2003_ep_198.19.1.4"
+              }
+            }
+          },
+          "vpn-network-accesses": {
+            "vpn-network-access": [
+              {
+                "id": "l2vpn-p2p-ac1001",
+                "connection": {
+                  "dot1q-interface": {
+                    "dot1q": {
+                      "rewrite": {
+                        "ingress": {
+                          "mode": "symmetric",
+                          "push": [
+                            null
+                          ],
+                          "dot1q": 1001
+                        }
+                      },
+                      "c-vlan-id": 1001,
+                      "physical-inf": "HundredGigE0/0/0/1"
+                    },
+                    "l2-access-type": "vpn-common:dot1q"
+                  },
+                  "encapsulation-type": "vpn-common:dot1q"
+                },
+                "Interface-mtu": 1500,
+                "ethernet-service-oam": {
+                  "y-1731": [
+                    {
+                      "maid": "null",
+                      "mep-id": 1002,
+                      "ietf-l2vpn-ntw-cisco-augmentations:y-1731-profile": [
+                        {
+                          "name": "Delay",
+                          "schedule": {
+                            "duration": 5,
+                            "interval": 5
+                          }
+                        },
+                        {
+                          "name": "test-loss",
+                          "schedule": {
+                            "duration": 5,
+                            "interval": 5
+                          }
+                        }
+                      ]
+                    }
+                  ],
+                  "md-name": "l2vpn-p2p-ac1001",
+                  "md-level": 4
+                }
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "control-word": "yes",
+    "vpn-svc-type": "vpn-common:t-ldp",
+    "ietf-l2vpn-ntw-cisco-augmentations:service-assurance": {
+      "rule-name": "Rule-L2VPN-NM-P2P system",
+      "profile-name": "Gold_L2VPN_ConfigProfile system",
+      "monitoring-state": "enable"
+    }
+  }
+}
+}
+}
