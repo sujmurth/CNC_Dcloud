@@ -1,0 +1,1959 @@
+{
+	"info": {
+		"_postman_id": "4a14c38c-610a-4a6f-a31f-f5824de9bb89",
+		"name": "CNC70-NB-API",
+		"description": "This postman collection provides the API requests and examples for the North Bound API supported by the CNC-CAT Application. Any OSS integration can use these APIs.All these APIs are accessible via Crossword API Gateway in the CNC CAT Application. Thee JWT Token authentication is required to access these APIs.",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "CW Authentication",
+			"item": [
+				{
+					"name": "cw-api-get-ticket-step1",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.globals.set(\"cat.cw.api.ticket\", \"\");",
+									"pm.globals.set(\"cat.cw.api.jwt\", \"\");"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"",
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([201,202]);",
+									"});",
+									"",
+									"pm.globals.set(\"cat.cw.api.ticket\", pm.response.text());",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/x-www-form-urlencoded"
+							},
+							{
+								"key": "Accept",
+								"value": "text/plain"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "username={{cat.cw.user}}&password={{cat.cw.password}}",
+							"options": {
+								"raw": {
+									"language": "text"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/sso/v1/tickets",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"sso",
+								"v1",
+								"tickets"
+							]
+						},
+						"description": "this is the first step in getting the JWT token for API authentication to get the TGT ticket which will be used in step2"
+					},
+					"response": []
+				},
+				{
+					"name": "cw-api-get-jwt-step2",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful POST request\", function () {",
+									"    pm.expect(pm.response.code).to.be.oneOf([200,201,202]);",
+									"});",
+									"",
+									"pm.globals.set(\"cat.cw.api.jwt\", pm.response.text());",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "service=https://{{cat.cw.host}}:{{cat.cw.port}}/app-dashboard",
+							"options": {
+								"raw": {
+									"language": "text"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/sso/v1/tickets/{{cat.cw.api.ticket}}",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"sso",
+								"v1",
+								"tickets",
+								"{{cat.cw.api.ticket}}"
+							]
+						},
+						"description": "this is the second and final step to get the JWT token for API authentication. The JWT token obtained with this API will be used as a bearer token in the authentication header in API calls."
+					},
+					"response": []
+				}
+			],
+			"description": "two requests have to be made to get the JWT token (bearer) required for any crosswork API access via API Gateway (Tyk)\n\nTo get the JWT token\n\n1. change the collection level variables for the host, port, user and password for a specific target crosswork server.\n2. invoke a step1 request to get the ticket\n3. invoke the step2 request to get the jwt token which needs the ticket (stored in a variable) obtained in step 1",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "srv6",
+			"item": [
+				{
+					"name": "Create:srv6-static-policies-4,2,6101-igp",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "\n  {\n    \"cisco-sr-te-cfp:sr-te\": {\n      \"cisco-sr-te-cfp-sr-policies:policies\": {\n        \"policy\": [\n          {\n            \"name\": \"2-4-6101\",\n            \"head-end\": [\n              {\n                \"name\": \"node-2\"\n              }\n            ],\n            \"srv6\": {\n              \"locator\": {\n                \"locator-name\": \"MAIN\",\n                \"behavior\": \"ub6-insert-reduced\"\n              }\n            },\n            \"tail-end\": \"2010::4\",\n            \"color\": 6101,\n            \"path\": [\n              {\n                \"preference\": 101,\n                \"dynamic\": {\n                  \"pce\": {},\n                  \"metric-type\": \"igp\"\n                }\n              }\n            ]\n          }\n        ]\n      }\n    }\n  },\n  {\n    \"cisco-sr-te-cfp:sr-te\": {\n      \"cisco-sr-te-cfp-sr-policies:policies\": {\n        \"policy\": [\n          {\n            \"name\": \"4-2-6101\",\n            \"head-end\": [\n              {\n                \"name\": \"node-4\"\n              }\n            ],\n            \"srv6\": {\n              \"locator\": {\n                \"locator-name\": \"MAIN\",\n                \"behavior\": \"ub6-insert-reduced\"\n              }\n            },\n            \"tail-end\": \"2010::2\",\n            \"color\": 6101,\n            \"path\": [\n              {\n                \"preference\": 101,\n                \"dynamic\": {\n                  \"pce\": {},\n                  \"metric-type\": \"igp\"\n                }\n              }\n            ]\n          }\n        ]\n      }\n    }\n  }\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create:srv6-odn-templates",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"cisco-sr-te-cfp:sr-te\": {\n        \"cisco-sr-te-cfp-sr-odn:odn\": {\n            \"odn-template\": [\n                {\n                    \"name\": \"odn_SRv6_te_6002\",\n                    \"color\": 6002,\n                    \"srv6\": {\n                        \"locator\": {\n                            \"behavior\": \"ub6-insert-reduced\",\n                            \"locator-name\": \"MAIN\"\n                        }\n                    },\n                    \"dynamic\": {\n                        \"pce\": {},\n                        \"metric-type\": \"te\"\n                    },\n                    \"head-end\": [\n                        {\n                            \"name\": \"node-3\"\n                        },\n                        {\n                            \"name\": \"node-4\"\n                        },\n                        {\n                            \"name\": \"node-2\"\n                        }\n                    ]\n                },\n                {\n                    \"name\": \"odn_SRv6_low_latency_6003\",\n                    \"color\": 6003,\n                    \"srv6\": {\n                        \"locator\": {\n                            \"behavior\": \"ub6-insert-reduced\",\n                            \"locator-name\": \"MAIN\"\n                        }\n                    },\n                    \"dynamic\": {\n                        \"pce\": {},\n                        \"metric-type\": \"latency\"\n                    },\n                    \"head-end\": [\n                        {\n                            \"name\": \"node-3\"\n                        },\n                        {\n                            \"name\": \"node-4\"\n                        },\n                        {\n                            \"name\": \"node-2\"\n                        }\n                    ]\n                }\n            ]\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create:cnc7.l3vpnpolicy-tag-set-vpn-601",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"cisco-l3vpn-routing-policy:l3vpn-routing-policy\": {\n      \"defined-sets\": {\n        \"tag-sets\": {\n          \"tag-set\": [\n            {\n              \"name\": \"VPN-601-EXTCOMM-SET\",\n              \"tag-value\": [6003]\n            }\n          ]\n        }\n      }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create:cnc7.l3vpnpolicy-vpn-601",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cisco-l3vpn-routing-policy:l3vpn-routing-policy\": {\n    \"policy-definitions\": {\n      \"policy-definition\": [\n        {\n          \"name\": \"VPN-601-POLICY\",\n          \"statements\": {\n            \"statement\": [\n              {\n                \"name\": \"stmnt1\",\n                \"actions\": {\n                  \"bgp-actions\": {\n                    \"set-ext-community\": {\n                      \"ext-community-set-ref\": \"VPN-601-EXTCOMM-SET\"\n                    }\n                  }\n                }\n              }\n            ]\n          }\n        }\n      ]\n    }\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create:cnc7.l3vpn-vpn-profile-vpn-601",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"ietf-l3vpn-ntw:l3vpn-ntw\": {\n    \"vpn-profiles\": {\n      \"valid-provider-identifiers\": {\n        \"routing-profile-identifier\": [\n          {\n            \"id\": \"VPN-601-POLICY\"\n          }\n        ]\n      }\n    }\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create:cnc7.l3vpn-vpn-601",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ietf-l3vpn-ntw:l3vpn-ntw\": {\n        \"vpn-services\": {\n            \"vpn-service\": {\n                \"vpn-id\": \"vpn-601\",\n                \"vpn-nodes\": {\n                    \"vpn-node\": [\n                        {\n                            \"vpn-node-id\": \"node-3\",\n                            \"vpn-network-accesses\": {\n                                \"vpn-network-access\": [\n                                    {\n                                        \"id\": \"3-ac3\",\n                                        \"connection\": {\n                                            \"encapsulation\": {\n                                                \"type\": \"ietf-vpn-common:dot1q\",\n                                                \"dot1q\": {\n                                                    \"cvlan-id\": 601\n                                                }\n                                            }\n                                        },\n                                        \"interface-id\": \"GigabitEthernet0/0/0/9\",\n                                        \"ip-connection\": {\n                                            \"ipv6\": {\n                                                    \"prefix-length\": 64,\n                                                    \"local-address\": \"2001:30:1:3::1\"\n                                                }\n                                        },\n                                        \"routing-protocols\": {\n                                            \"routing-protocol\": [\n                                                {\n                                                    \"id\": \"0\",\n                                                    \"bgp\": {\n                                                        \"peer-as\": 65003,\n                                                        \"neighbor\": [\n                                                            \"2001:30:1:3::2\"\n                                                        ],\n                                                        \"address-family\": \"ipv6\",\n                                                        \"redistribute-connected\": [\n                                                            {\n                                                                \"enable\": true,\n                                                                \"address-family\": \"ietf-vpn-common:ipv6\"\n                                                            }\n                                                        ],\n                                                        \"cisco-l3vpn-ntw:mpls-deactivation\": false\n                                                    },\n                                                    \"type\": \"ietf-vpn-common:bgp-routing\"\n                                                }\n                                            ]\n                                        }\n                                    }\n                                ]\n                            },\n                            \"active-vpn-instance-profiles\": {\n                                \"vpn-instance-profile\": [\n                                    {\n                                        \"profile-id\": \"default\",\n                                        \"address-family\": [\n                                            {\n                                                \"vpn-targets\": {\n                                                    \"vpn-policies\": {\n                                                        \"export-policy\": \"VPN-601-POLICY\"\n                                                    }\n                                                },\n                                                \"address-family\": \"ietf-vpn-common:ipv4\"\n                                            },\n                                            {\n                                                \"vpn-targets\": {\n                                                    \"vpn-policies\": {\n                                                        \"export-policy\": \"VPN-601-POLICY\"\n                                                    }\n                                                },\n                                                \"address-family\": \"ietf-vpn-common:ipv6\"\n                                            }\n                                        ]\n                                    }\n                                ]\n                            }\n                        },\n                        {\n                            \"vpn-node-id\": \"node-4\",\n                            \"vpn-network-accesses\": {\n                                \"vpn-network-access\": [\n                                    {\n                                        \"id\": \"2-ac2\",\n                                        \"connection\": {\n                                            \"encapsulation\": {\n                                                \"type\": \"ietf-vpn-common:dot1q\",\n                                                \"dot1q\": {\n                                                    \"cvlan-id\": 601\n                                                }\n                                            }\n                                        },\n                                        \"interface-id\": \"GigabitEthernet0/0/0/9\",\n                                        \"ip-connection\": {\n                                            \"ipv6\": {\n                                                    \"prefix-length\": 64,\n                                                    \"local-address\": \"2001:30:1:4::1\"\n                                                }\n                                        },\n                                        \"routing-protocols\": {\n                                            \"routing-protocol\": [\n                                                {\n                                                    \"id\": \"0\",\n                                                    \"bgp\": {\n                                                        \"peer-as\": 65003,\n                                                        \"neighbor\": [\n                                                            \"2001:30:1:4::2\"\n                                                        ],\n                                                        \"address-family\": \"ipv6\",\n                                                        \"redistribute-connected\": [\n                                                            {\n                                                                \"enable\": true,\n                                                                \"address-family\": \"ietf-vpn-common:ipv6\"\n                                                            }\n                                                        ],\n                                                        \"cisco-l3vpn-ntw:mpls-deactivation\": false\n                                                    },\n                                                    \"type\": \"ietf-vpn-common:bgp-routing\"\n                                                }\n                                            ]\n                                        }\n                                    }\n                                ]\n                            },\n                            \"active-vpn-instance-profiles\": {\n                                \"vpn-instance-profile\": [\n                                    {\n                                        \"profile-id\": \"default\",\n                                        \"address-family\": [\n                                            {\n                                                \"vpn-targets\": {\n                                                    \"vpn-policies\": {\n                                                        \"export-policy\": \"VPN-601-POLICY\"\n                                                    }\n                                                },\n                                                \"address-family\": \"ietf-vpn-common:ipv4\"\n                                            },\n                                            {\n                                                \"vpn-targets\": {\n                                                    \"vpn-policies\": {\n                                                        \"export-policy\": \"VPN-601-POLICY\"\n                                                    }\n                                                },\n                                                \"address-family\": \"ietf-vpn-common:ipv6\"\n                                            }\n                                        ]\n                                    }\n                                ]\n                            }\n                        },\n                        {\n                            \"vpn-node-id\": \"node-2\",\n                            \"vpn-network-accesses\": {\n                                \"vpn-network-access\": [\n                                    {\n                                        \"id\": \"1-ac1\",\n                                        \"connection\": {\n                                            \"encapsulation\": {\n                                                \"type\": \"ietf-vpn-common:dot1q\",\n                                                \"dot1q\": {\n                                                    \"cvlan-id\": 601\n                                                }\n                                            }\n                                        },\n                                        \"interface-id\": \"GigabitEthernet0/0/0/9\",\n                                        \"ip-connection\": {\n                                            \"ipv6\": {\n                                                    \"prefix-length\": 64,\n                                                    \"local-address\": \"2001:30:1:5::1\"\n                                                }\n                                        },\n                                        \"routing-protocols\": {\n                                            \"routing-protocol\": [\n                                                {\n                                                    \"id\": \"0\",\n                                                    \"bgp\": {\n                                                        \"peer-as\": 65003,\n                                                        \"neighbor\": [\n                                                            \"2001:30:1:5::2\"\n                                                        ],\n                                                        \"address-family\": \"ipv6\",\n                                                        \"redistribute-connected\": [\n                                                            {\n                                                                \"enable\": true,\n                                                                \"address-family\": \"ietf-vpn-common:ipv6\"\n                                                            }\n                                                        ],\n                                                        \"cisco-l3vpn-ntw:mpls-deactivation\": false\n                                                    },\n                                                    \"type\": \"ietf-vpn-common:bgp-routing\"\n                                                }\n                                            ]\n                                        }\n                                    }\n                                ]\n                            },\n                            \"active-vpn-instance-profiles\": {\n                                \"vpn-instance-profile\": [\n                                    {\n                                        \"profile-id\": \"default\",\n                                        \"address-family\": [\n                                            {\n                                                \"vpn-targets\": {\n                                                    \"vpn-policies\": {\n                                                        \"export-policy\": \"VPN-601-POLICY\"\n                                                    }\n                                                },\n                                                \"address-family\": \"ietf-vpn-common:ipv4\"\n                                            },\n                                            {\n                                                \"vpn-targets\": {\n                                                    \"vpn-policies\": {\n                                                        \"export-policy\": \"VPN-601-POLICY\"\n                                                    }\n                                                },\n                                                \"address-family\": \"ietf-vpn-common:ipv6\"\n                                            }\n                                        ]\n                                    }\n                                ]\n                            }\n                        }\n                    ]\n                },\n                \"vpn-service-topology\": \"ietf-vpn-common:any-to-any\",\n                \"vpn-instance-profiles\": {\n                    \"vpn-instance-profile\": [\n                        {\n                            \"profile-id\": \"default\"\n                        }\n                    ]\n                },\n                \"cisco-l3vpn-ntw:vpn-target\": {\n                    \"hub-rt-value\": \"0:601:601\"\n                },\n                \"cisco-l3vpn-ntw:service-assurance\": {\n                    \"rule-name\": \"Rule-L3VPN-NM system\",\n                    \"preservation\": \"remove\",\n                    \"profile-name\": \"Gold_L3VPN_ConfigProfile system\",\n                    \"monitoring-state\": \"disable\"\n                }\n            }\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "sr-te",
+			"item": [
+				{
+					"name": "Create:SRTE.Dynamic 2003 latency",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"cisco-sr-te-cfp:sr-te\": {\r\n    \"cisco-sr-te-cfp-sr-policies:policies\": {\r\n      \"policy\": [\r\n        {\r\n          \"name\": \"srte_c_2003_ep_198.19.1.3\",\r\n          \"head-end\": [\r\n            {\r\n              \"name\": \"node-1\"\r\n            }\r\n          ],\r\n          \"tail-end\": \"198.19.1.3\",\r\n          \"color\": 2003,\r\n          \"path\": [\r\n            {\r\n              \"preference\": 101,\r\n              \"dynamic\": {\r\n                \"metric-type\": \"latency\" ,\r\n                \"pce\" : \"\"\r\n              }\r\n            }\r\n          ]\r\n        },\r\n        {\r\n          \"name\": \"srte_c_2003_ep_198.19.1.1\",\r\n          \"head-end\": [\r\n            {\r\n              \"name\": \"node-3\"\r\n            }\r\n          ],\r\n          \"tail-end\": \"198.19.1.1\",\r\n          \"color\": 2003,\r\n          \"path\": [\r\n            {\r\n              \"preference\": 101,\r\n              \"dynamic\": {\r\n                \"metric-type\": \"latency\" ,\r\n                \"pce\": \"\"\r\n              }\r\n            }\r\n          ]\r\n        }\r\n      ]\r\n    }\r\n  }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create:SRTE.ODN 4001-3",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cisco-sr-te-cfp:sr-te\": {\n    \"cisco-sr-te-cfp-sr-odn:odn\": {\n      \"odn-template\": [\n      {\n        \"name\": \"odn_low_igp_cost_4001\",\n        \"color\": 4001,\n        \"dynamic\": {\n          \"pce\": {},\n          \"metric-type\": \"igp\"\n        },\n        \"head-end\": [\n          {\n            \"name\": \"node-1\"\n          },\n          {\n            \"name\": \"node-2\"\n          },\n          {\n            \"name\": \"node-3\"\n          }\n        ]\n      },\n      {\n        \"name\": \"odn_low_te_cost_4002\",\n        \"color\": 4002,\n        \"dynamic\": {\n          \"pce\": {},\n          \"metric-type\": \"te\"\n        },\n        \"head-end\": [\n          {\n            \"name\": \"node-1\"\n          },\n          {\n            \"name\": \"node-2\"\n          },\n          {\n            \"name\": \"node-3\"\n          }\n        ]\n      },\n      {\n        \"name\": \"odn_low_latency_4003\",\n        \"color\": 4003,\n        \"dynamic\": {\n          \"pce\": {},\n          \"metric-type\": \"latency\"\n        },\n        \"head-end\": [\n          {\n            \"name\": \"node-1\"\n          },\n          {\n            \"name\": \"node-2\"\n          },\n          {\n            \"name\": \"node-3\"\n          }\n        ]\n      }\n    ]\n  }\n}\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create:SRTE.ODN 4501 igp",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"cisco-sr-te-cfp:sr-te\": {\r\n    \"cisco-sr-te-cfp-sr-odn:odn\": {\r\n        \"odn-template\": {\r\n            \"name\": \"odn_4501\",\r\n            \"color\": 4501,\r\n            \"dynamic\": {\r\n            \"pce\": {},\r\n            \"metric-type\": \"igp\"\r\n            },\r\n            \"head-end\": [\r\n            {\r\n                \"name\": \"Node-3\"\r\n            },\r\n            {\r\n                \"name\": \"Node-4\"\r\n            },\r\n            {\r\n                \"name\": \"Node-5\"\r\n            }\r\n            ]\r\n        }\r\n    }\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create:SRTE.ODN-template-4129-flexalgo-129",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"cisco-sr-te-cfp:sr-te\": {\n        \"cisco-sr-te-cfp-sr-odn:odn\": {\n            \"odn-template\": {\n                \"name\": \"odn_flexalgo_top_4129\",\n                \"color\": 4129,\n                \"dynamic\": {\n                    \"pce\": {},\n                    \"flex-alg\": 129,\n                    \"metric-type\": \"te\"\n                },\n                \"head-end\": [\n                    {\n                        \"name\": \"node-4\"\n                    },\n                    {\n                        \"name\": \"node-5\"\n                    }\n                ]\n            }\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create:SRTE.ODN-template-4130-flexalgo-130",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"cisco-sr-te-cfp:sr-te\": {\n        \"cisco-sr-te-cfp-sr-odn:odn\": {\n            \"odn-template\": {\n                \"name\": \"odn_flexalgo_bottom_4130\",\n                \"color\": 4130,\n                \"dynamic\": {\n                    \"pce\": {},\n                    \"flex-alg\": 130,\n                    \"metric-type\": \"te\"\n                },\n                \"head-end\": [\n                    {\n                        \"name\": \"Node-4\"\n                    },\n                    {\n                        \"name\": \"Node-5\"\n                    }\n                ]\n            }\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "rsvp-te",
+			"item": [
+				{
+					"name": "Create:cnc7.ietf-te-tunnel",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"ietf-te:te\": {\n    \"tunnels\": {\n      \"tunnel\": [\n        {\n          \"name\": \"ietf-rsvp-te-3001\",\n          \"identifier\": 3001,\n          \"description\": \"rsvp TE tunnels between 1 and 3\",\n          \"source\": \"198.19.1.1\",\n          \"destination\": \"198.19.1.3\",\n          \"bidirectional\": true,\n          \"te-bandwidth\": {\n            \"generic\": \"1000\"\n          },\n          \"primary-paths\": {\n            \"primary-path\": [\n              {\n                \"name\": \"1\",\n                \"path-computation-method\": \"ietf-te-types:path-explicitly-defined\",\n                \"explicit-route-objects-always\": {\n                  \"route-object-include-exclude\": [\n                    {\n                      \"index\": 1,\n                      \"explicit-route-usage\": \"ietf-te-types:route-include-object\",\n                      \"numbered-node-hop\": {\n                        \"node-id\": \"198.19.1.8\",\n                        \"hop-type\": \"loose\"\n                      }\n                    },\n                    {\n                      \"index\": 2,\n                      \"label-hop\": {\n                        \"te-label\": {\n                          \"generic\": \"Afw=\"\n                        }\n                      }\n                    }\n                  ]\n                }\n              },\n              {\n                \"name\": \"2\",\n                \"preference\": 2,\n                \"optimizations\": {\n                  \"optimization-metric\": [\n                    {\n                      \"metric-type\": \"te-types:path-metric-te\"\n                    }\n                  ]\n                }\n              },\n              {\n                \"name\": \"3\",\n                \"path-computation-method\": \"ietf-te-types:path-externally-queried\",\n                \"preference\": 3,\n                \"optimizations\": {\n                  \"optimization-metric\": [\n                    {\n                      \"metric-type\": \"te-types:path-metric-te\"\n                    }\n                  ]\n                }\n              },\n              {\n                \"name\": \"4\",\n                \"path-computation-method\": \"ietf-te-types:path-externally-queried\",\n                \"preference\": 4,\n                \"optimizations\": {\n                  \"optimization-metric\": [\n                    {\n                      \"metric-type\": \"te-types:path-metric-te\"\n                    }\n                  ]\n                }\n              }\n            ]\n          },\n          \"cisco-te:head-end\": \"node-1\",\n          \"cisco-te:tail-end\": \"node-3\"\n        }\n      ]\n    }\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "l2vpn-tldp",
+			"item": [
+				{
+					"name": "Create:cnc7.ietf-l2vpn-tldp-1001",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"ietf-l2vpn-ntw:l2vpn-ntw\": {\n    \"vpn-services\": {\n      \"vpn-service\": [\n        {\n          \"vpn-id\": \"l2vpn-tldp-1001\",\n          \"vpn-type\": \"ietf-vpn-common:vpws\",\n          \"vpn-nodes\": {\n            \"vpn-node\": [\n              {\n                \"vpn-node-id\": \"node-1\",\n                \"signaling-option\": {\n                  \"ldp-or-l2tp\": {\n                    \"pw-peer-list\": [\n                      {\n                        \"peer-addr\": \"198.19.1.3\",\n                        \"vc-id\": 1001\n                      }\n                    ]\n                  }\n                },\n                \"vpn-network-accesses\": {\n                  \"vpn-network-access\": [\n                    {\n                      \"id\": \"l2vpn-p2p-ac1001\",\n                      \"interface-id\": \"GigabitEthernet0/0/0/9\",\n                      \"connection\": {\n                        \"encapsulation\": {\n                          \"encap-type\": \"ietf-vpn-common:dot1q\",\n                          \"dot1q\": {\n                            \"cvlan-id\": 1001\n                          }\n                        }\n                      }\n                    }\n                  ]\n                }\n              },\n              {\n                \"vpn-node-id\": \"node-3\",\n                \"signaling-option\": {\n                  \"ldp-or-l2tp\": {\n                    \"pw-peer-list\": [\n                      {\n                        \"peer-addr\": \"198.19.1.1\",\n                        \"vc-id\": 1001\n                      }\n                    ]\n                  }\n                },\n                \"vpn-network-accesses\": {\n                  \"vpn-network-access\": [\n                    {\n                      \"id\": \"l2vpn-p2p-ac1001\",\n                      \"interface-id\": \"GigabitEthernet0/0/0/9\",\n                      \"connection\": {\n                        \"encapsulation\": {\n                          \"encap-type\": \"ietf-vpn-common:dot1q\",\n                          \"dot1q\": {\n                            \"cvlan-id\": 1001\n                          }\n                        }\n                      }\n                    }\n                  ]\n                }\n              }\n            ]\n          },\n          \"cisco-l2vpn-ntw:control-word\": \"yes\",\n          \"cisco-l2vpn-ntw:service-assurance\": {\n            \"monitoring-state\": \"disable\",\n            \"preservation\": \"remove\",\n            \"profile-name\": \"Gold_L2VPN_ConfigProfile system\",\n            \"rule-name\": \"Rule-L2VPN-NM-P2P-Basic system\"\n          }\n        }\n      ]\n    }\n  }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update:cnc7.ietf-l2vpn-add-srte",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"ietf-l2vpn-ntw:l2vpn-ntw\": {\n    \"vpn-services\": {\n      \"vpn-service\": [\n        {\n          \"vpn-id\": \"l2vpn-tldp-1001\",\n          \"vpn-type\": \"ietf-vpn-common:vpws\",\n          \"vpn-nodes\": {\n            \"vpn-node\": [\n              {\n                \"vpn-node-id\": \"node-1\",\n                \"cisco-l2vpn-ntw:te-service-mapping\": {\n                  \"te-mapping\": {\n                    \"sr-policy\": {\n                      \"policy-type\": \"policy\",\n                      \"policy\": \"srte_c_2003_ep_198.19.1.3\",\n                      \"fallback\": \"disable\"\n                    }\n                  }\n                }\n              },\n              {\n                \"vpn-node-id\": \"node-3\",\n                \"cisco-l2vpn-ntw:te-service-mapping\": {\n                  \"te-mapping\": {\n                    \"sr-policy\": {\n                      \"policy-type\": \"policy\",\n                      \"policy\": \"srte_c_2003_ep_198.19.1.1\",\n                      \"fallback\": \"disable\"\n                    }\n                  }\n                }\n              }\n            ]\n          },\n          \"cisco-l2vpn-ntw:control-word\": \"yes\"\n        }\n      ]\n    }\n  }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update:cnc7.ietf-l2vpn-add-rsvpte",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"ietf-l2vpn-ntw:l2vpn-ntw\": {\n    \"vpn-services\": {\n      \"vpn-service\": [\n        {\n          \"vpn-id\": \"l2vpn-tldp-1001\",\n          \"vpn-type\": \"ietf-vpn-common:vpws\",\n          \"vpn-nodes\": {\n            \"vpn-node\": [\n              {\n                \"vpn-node-id\": \"node-1\",\n                \"cisco-l2vpn-ntw:te-service-mapping\": {\n                  \"te-mapping\": {\n                    \"te-tunnel-list\": {\n                        \"te-tunnel-id\": 3001,\n                        \"fallback\": \"disable\"\n                      }\n                  }\n                }\n              },\n              {\n                \"vpn-node-id\": \"node-3\",\n                \"cisco-l2vpn-ntw:te-service-mapping\": {\n                  \"te-mapping\": {\n                    \"te-tunnel-list\": {\n                        \"te-tunnel-id\": 3001,\n                        \"fallback\": \"disable\"\n                      }\n                  }\n                }\n              }\n            ]\n          },\n          \"cisco-l2vpn-ntw:control-word\": \"yes\"\n        }\n      ]\n    }\n  }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "l2vpn-elan",
+			"item": [
+				{
+					"name": "Create:cnc5.l2vpnpolicy-tag-set-l2vpn-evpn-4501",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cisco-l2vpn-routing-policy:l2vpn-routing-policy\": {\n    \"defined-sets\": {\n      \"tag-sets\": {\n        \"tag-set\": [\n          {\n            \"name\": \"set-color-community-4501\",\n            \"tag-value\": [\n              4501\n            ]\n          }\n        ]\n      }\n    }\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create:cnc5.l2vpnpolicy-rd-set-l2vpn-evpn-4501",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cisco-l2vpn-routing-policy:l2vpn-routing-policy\": {\n    \"defined-sets\": {\n      \"rd-sets\": {\n        \"rd-set\": [\n          {\n            \"name\": \"map-rd-to-color-4501\",\n            \"rd\": [\n              \"198.19.1.3:4501\",\n              \"198.19.1.4:4501\",\n              \"198.19.1.5:4501\"\n            ]\n          }\n        ]\n      }\n    }\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create:cnc5.l2vpnpolicy-l2vpn-evpn-4501",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cisco-l2vpn-routing-policy:l2vpn-routing-policy\": {\n    \"policy-definitions\": {\n      \"policy-definition\": [\n        {\n          \"name\": \"l2vpn-policy-evpn-4501\",\n          \"statements\": {\n            \"statement\": [\n              {\n                \"name\": \"1\",\n                \"conditions\": {\n                  \"match-rd-set\": {\n                    \"rd-set\": \"map-rd-to-color-4501\"\n                  }\n                },\n                \"actions\": {\n                  \"bgp-actions\": {\n                    \"set-ext-community\": {\n                      \"ext-community-set-ref\": \"set-color-community-4501\"\n                    }\n                  }\n                }\n              }\n            ]\n          }\n        }\n      ]\n    }\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create:cnc5.l2vpn-vpn-profile-l2vpn-evpn-4501",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"ietf-l2vpn-ntw:l2vpn-ntw\": {\n    \"vpn-profiles\": {\n      \"valid-provider-identifiers\": {\n        \"routing-profile-identifier\": [\n          {\n            \"id\": \"l2vpn-policy-evpn-4501\"\n          }\n        ]\n      }\n    }\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create:cnc5.l2vpn-l2vpn-evpn-elan-4501",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"ietf-l2vpn-ntw:l2vpn-ntw\": {\n    \"vpn-services\": {\n      \"vpn-service\": [\n        {\n          \"vpn-id\": \"l2vpn-evpn-4501\",\n          \"vpn-type\": \"ietf-vpn-common:mpls-evpn\",\n          \"vpn-service-topology\": \"ietf-vpn-common:any-to-any\",\n          \"vpn-nodes\": {\n            \"vpn-node\": [\n              {\n                \"vpn-node-id\": \"Node-3\",\n                \"vpn-network-accesses\": {\n                  \"vpn-network-access\": [\n                    {\n                      \"id\": \"1\",\n                      \"interface-id\": \"GigabitEthernet0/0/0/1\",\n                      \"connection\": {\n                        \"encapsulation\": {\n                          \"encap-type\": \"ietf-vpn-common:dot1q\",\n                          \"dot1q\": {\n                            \"cvlan-id\": 2501\n                          }\n                        }\n                      }\n                    }\n                  ]\n                },\n                \"cisco-l2vpn-ntw:te-service-mapping\": {\n                  \"te-mapping\": {\n                    \"odn\": {\n                      \"route-policy\": [\n                        \"l2vpn-policy-evpn-4501\"\n                      ],\n                      \"attach-point\": {\n                        \"parent-rr-route-policy\": \"SET_COLOR_EVPN_VPWS\"\n                      }\n                    }\n                  }\n                }\n              },\n              {\n                \"vpn-node-id\": \"Node-4\",\n                \"vpn-network-accesses\": {\n                  \"vpn-network-access\": [\n                    {\n                      \"id\": \"1\",\n                      \"interface-id\": \"GigabitEthernet0/0/0/1\",\n                      \"connection\": {\n                        \"encapsulation\": {\n                          \"encap-type\": \"ietf-vpn-common:dot1q\",\n                          \"dot1q\": {\n                            \"cvlan-id\": 2501\n                          }\n                        }\n                      }\n                    }\n                  ]\n                },\n                \"cisco-l2vpn-ntw:te-service-mapping\": {\n                  \"te-mapping\": {\n                    \"odn\": {\n                      \"route-policy\": [\n                        \"l2vpn-policy-evpn-4501\"\n                      ],\n                      \"attach-point\": {\n                        \"parent-rr-route-policy\": \"SET_COLOR_EVPN_VPWS\"\n                      }\n                    }\n                  }\n                }\n              },\n              {\n                \"vpn-node-id\": \"Node-5\",\n                \"vpn-network-accesses\": {\n                  \"vpn-network-access\": [\n                    {\n                      \"id\": \"2\",\n                      \"interface-id\": \"GigabitEthernet0/0/0/1\",\n                      \"connection\": {\n                        \"encapsulation\": {\n                          \"encap-type\": \"ietf-vpn-common:dot1q\",\n                          \"dot1q\": {\n                            \"cvlan-id\": 2501\n                          }\n                        }\n                      }\n                    }\n                  ]\n                },\n                \"cisco-l2vpn-ntw:te-service-mapping\": {\n                  \"te-mapping\": {\n                    \"odn\": {\n                      \"route-policy\": [\n                        \"l2vpn-policy-evpn-4501\"\n                      ],\n                      \"attach-point\": {\n                        \"parent-rr-route-policy\": \"SET_COLOR_EVPN_VPWS\"\n                      }\n                    }\n                  }\n                }\n              }\n            ]\n          },\n          \"cisco-l2vpn-ntw:evi-id\": 4501,\n          \"cisco-l2vpn-ntw:vpn-target\": {\n            \"hub-rt-value\": [\n              \"0:65001:100\"\n            ]\n          },\n          \"cisco-l2vpn-ntw:bridge-group\": \"evpn-elan-4501\"\n        }\n      ]\n    }\n  }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "l2vpn-evpn-vpws",
+			"item": [
+				{
+					"name": "Create:cnc7.l2vpnpolicy-tag-set-l2vpn-evpn-4129",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cisco-l2vpn-routing-policy:l2vpn-routing-policy\": {\n    \"defined-sets\": {\n      \"tag-sets\": {\n        \"tag-set\": [\n          {\n            \"name\": \"set-color-community-4129\",\n            \"tag-value\": [\n              4129\n            ]\n          }\n        ]\n      }\n    }\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create:cnc7.l2vpnpolicy-tag-set-l2vpn-evpn-4130",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cisco-l2vpn-routing-policy:l2vpn-routing-policy\": {\n    \"defined-sets\": {\n      \"tag-sets\": {\n        \"tag-set\": [\n          {\n            \"name\": \"set-color-community-4130\",\n            \"tag-value\": [\n              4130\n            ]\n          }\n        ]\n      }\n    }\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create:cnc7.l2vpnpolicy-rd-set-l2vpn-evpn-4129",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cisco-l2vpn-routing-policy:l2vpn-routing-policy\": {\n    \"defined-sets\": {\n      \"rd-sets\": {\n        \"rd-set\": [\n          {\n            \"name\": \"map-rd-to-color-4129\",\n            \"rd\": [\n              \"198.19.1.4:4129\",\n              \"198.19.1.2:4129\"\n            ]\n          }\n        ]\n      }\n    }\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create:cnc7.l2vpnpolicy-rd-set-l2vpn-evpn-4130",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cisco-l2vpn-routing-policy:l2vpn-routing-policy\": {\n    \"defined-sets\": {\n      \"rd-sets\": {\n        \"rd-set\": [\n          {\n            \"name\": \"map-rd-to-color-4130\",\n            \"rd\": [\n              \"198.19.1.4:4130\",\n              \"198.19.1.2:4130\"\n            ]\n          }\n        ]\n      }\n    }\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create:cnc7.l2vpnpolicy-l2vpn-evpn-4129",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cisco-l2vpn-routing-policy:l2vpn-routing-policy\": {\n    \"policy-definitions\": {\n      \"policy-definition\": [\n        {\n          \"name\": \"l2vpn-policy-evpn-4129\",\n          \"statements\": {\n            \"statement\": [\n              {\n                \"name\": \"1\",\n                \"conditions\": {\n                  \"match-rd-set\": {\n                    \"rd-set\": \"map-rd-to-color-4129\"\n                  }\n                },\n                \"actions\": {\n                  \"bgp-actions\": {\n                    \"set-ext-community\": {\n                      \"ext-community-set-ref\": \"set-color-community-4129\"\n                    }\n                  }\n                }\n              }\n            ]\n          }\n        }\n      ]\n    }\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create:cnc7.l2vpnpolicy-l2vpn-evpn-4130",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cisco-l2vpn-routing-policy:l2vpn-routing-policy\": {\n    \"policy-definitions\": {\n      \"policy-definition\": [\n        {\n          \"name\": \"l2vpn-policy-evpn-4130\",\n          \"statements\": {\n            \"statement\": [\n              {\n                \"name\": \"1\",\n                \"conditions\": {\n                  \"match-rd-set\": {\n                    \"rd-set\": \"map-rd-to-color-4130\"\n                  }\n                },\n                \"actions\": {\n                  \"bgp-actions\": {\n                    \"set-ext-community\": {\n                      \"ext-community-set-ref\": \"set-color-community-4130\"\n                    }\n                  }\n                }\n              }\n            ]\n          }\n        }\n      ]\n    }\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create:cnc7.l2vpn-vpn-profile-l2vpn-evpn-4129",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"ietf-l2vpn-ntw:l2vpn-ntw\": {\n    \"vpn-profiles\": {\n      \"valid-provider-identifiers\": {\n        \"routing-profile-identifier\": [\n          {\n            \"id\": \"l2vpn-policy-evpn-4129\"\n          }\n        ]\n      }\n    }\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create:cnc7.l2vpn-vpn-profile-l2vpn-evpn-4130",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"ietf-l2vpn-ntw:l2vpn-ntw\": {\n    \"vpn-profiles\": {\n      \"valid-provider-identifiers\": {\n        \"routing-profile-identifier\": [\n          {\n            \"id\": \"l2vpn-policy-evpn-4130\"\n          }\n        ]\n      }\n    }\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create:cnc7.l2vpn-l2vpn-evpn-vpws-4129",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"ietf-l2vpn-ntw:l2vpn-ntw\": {\n    \"vpn-services\": {\n      \"vpn-service\": [\n        {\n          \"vpn-id\": \"l2vpn-evpn-4129\",\n          \"vpn-type\": \"ietf-vpn-common:vpws-evpn\",\n          \"vpn-nodes\": {\n            \"vpn-node\": [\n              {\n                \"vpn-node-id\": \"node-4\",\n                \"vpn-network-accesses\": {\n                  \"vpn-network-access\": [\n                    {\n                      \"id\": \"1\",\n                      \"interface-id\": \"GigabitEthernet0/0/0/9\",\n                      \"connection\": {\n                        \"encapsulation\": {\n                          \"encap-type\": \"ietf-vpn-common:dot1q\",\n                          \"dot1q\": {\n                            \"cvlan-id\": 2129\n                          }\n                        }\n                      }\n                    }\n                  ]\n                },\n                \"cisco-l2vpn-ntw:te-service-mapping\": {\n                  \"te-mapping\": {\n                    \"odn\": {\n                      \"route-policy\": [\n                        \"l2vpn-policy-evpn-4129\"\n                      ],\n                      \"attach-point\": {\n                        \"parent-rr-route-policy\": \"SET_COLOR_EVPN_VPWS\"\n                      }\n                    }\n                  }\n                }\n              },\n              {\n                \"vpn-node-id\": \"node-2\",\n                \"vpn-network-accesses\": {\n                  \"vpn-network-access\": [\n                    {\n                      \"id\": \"2\",\n                      \"interface-id\": \"GigabitEthernet0/0/0/9\",\n                      \"connection\": {\n                        \"encapsulation\": {\n                          \"encap-type\": \"ietf-vpn-common:dot1q\",\n                          \"dot1q\": {\n                            \"cvlan-id\": 2129\n                          }\n                        }\n                      }\n                    }\n                  ]\n                },\n                \"cisco-l2vpn-ntw:te-service-mapping\": {\n                  \"te-mapping\": {\n                    \"odn\": {\n                      \"route-policy\": [\n                        \"l2vpn-policy-evpn-4129\"\n                      ],\n                      \"attach-point\": {\n                        \"parent-rr-route-policy\": \"SET_COLOR_EVPN_VPWS\"\n                      }\n                    }\n                  }\n                }\n              }\n            ]\n          },\n          \"cisco-l2vpn-ntw:evi-id\": 4129,\n          \"cisco-l2vpn-ntw:auto-evi-source\": [\n            null\n          ],\n          \"cisco-l2vpn-ntw:auto-evi-target\": [\n            null\n          ]\n        }\n      ]\n    }\n  }\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create:cnc7.l2vpn-l2vpn-evpn-vpws-4130",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"ietf-l2vpn-ntw:l2vpn-ntw\": {\n    \"vpn-services\": {\n      \"vpn-service\": [\n        {\n          \"vpn-id\": \"l2vpn-evpn-4130\",\n          \"vpn-type\": \"ietf-vpn-common:vpws-evpn\",\n          \"vpn-nodes\": {\n            \"vpn-node\": [\n              {\n                \"vpn-node-id\": \"node-4\",\n                \"vpn-network-accesses\": {\n                  \"vpn-network-access\": [\n                    {\n                      \"id\": \"1\",\n                      \"interface-id\": \"GigabitEthernet0/0/0/9\",\n                      \"connection\": {\n                        \"encapsulation\": {\n                          \"encap-type\": \"ietf-vpn-common:dot1q\",\n                          \"dot1q\": {\n                            \"cvlan-id\": 2130\n                          }\n                        }\n                      }\n                    }\n                  ]\n                },\n                \"cisco-l2vpn-ntw:te-service-mapping\": {\n                  \"te-mapping\": {\n                    \"odn\": {\n                      \"route-policy\": [\n                        \"l2vpn-policy-evpn-4130\"\n                      ],\n                      \"attach-point\": {\n                        \"parent-rr-route-policy\": \"SET_COLOR_EVPN_VPWS\"\n                      }\n                    }\n                  }\n                }\n              },\n              {\n                \"vpn-node-id\": \"node-2\",\n                \"vpn-network-accesses\": {\n                  \"vpn-network-access\": [\n                    {\n                      \"id\": \"2\",\n                      \"interface-id\": \"GigabitEthernet0/0/0/9\",\n                      \"connection\": {\n                        \"encapsulation\": {\n                          \"encap-type\": \"ietf-vpn-common:dot1q\",\n                          \"dot1q\": {\n                            \"cvlan-id\": 2130\n                          }\n                        }\n                      }\n                    }\n                  ]\n                },\n                \"cisco-l2vpn-ntw:te-service-mapping\": {\n                  \"te-mapping\": {\n                    \"odn\": {\n                      \"route-policy\": [\n                        \"l2vpn-policy-evpn-4130\"\n                      ],\n                      \"attach-point\": {\n                        \"parent-rr-route-policy\": \"SET_COLOR_EVPN_VPWS\"\n                      }\n                    }\n                  }\n                }\n              }\n            ]\n          },\n          \"cisco-l2vpn-ntw:evi-id\": 4130,\n          \"cisco-l2vpn-ntw:auto-evi-source\": [\n            null\n          ],\n          \"cisco-l2vpn-ntw:auto-evi-target\": [\n            null\n          ]\n        }\n      ]\n    }\n  }\n}\n\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "l3vpn",
+			"item": [
+				{
+					"name": "link-failure",
+					"item": [
+						{
+							"name": "Step1:link-down",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/yang-data+xml"
+									},
+									{
+										"key": "Accept",
+										"value": "application/yang-data+xml"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "<devices xmlns=\"http://tail-f.com/ns/ncs\">\n  <device>\n    <name>node-2</name>\n    <config>\n      <interface xmlns=\"http://tail-f.com/ned/cisco-ios-xr\">\n        <GigabitEthernet>\n          <id>0/0/0/9</id>\n            <shutdown/>\n        </GigabitEthernet>\n      </interface>\n    </config>\n  </device>\n</devices>",
+									"options": {
+										"raw": {
+											"language": "xml"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data/",
+									"protocol": "https",
+									"host": [
+										"{{cat.cw.host}}"
+									],
+									"port": "{{cat.cw.port}}",
+									"path": [
+										"crosswork",
+										"proxy",
+										"nso",
+										"restconf",
+										"data",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Step2:link-up",
+							"request": {
+								"method": "PATCH",
+								"header": [
+									{
+										"key": "Content-Type",
+										"name": "Content-Type",
+										"type": "text",
+										"value": "application/yang-data+xml"
+									},
+									{
+										"key": "Accept",
+										"value": "application/yang-data+xml"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "<devices xmlns=\"http://tail-f.com/ns/ncs\">\n  <device>\n    <name>node-2</name>\n    <config>\n      <interface xmlns=\"http://tail-f.com/ned/cisco-ios-xr\">\n        <GigabitEthernet>\n          <id>0/0/0/9</id>\n            <shutdown xmlns:nc=\"urn:ietf:params:xml:ns:netconf:base:1.0\"\n                                 nc:operation=\"delete\"/>\n        </GigabitEthernet>\n      </interface>\n    </config>\n  </device>\n</devices>",
+									"options": {
+										"raw": {
+											"language": "xml"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data/",
+									"protocol": "https",
+									"host": [
+										"{{cat.cw.host}}"
+									],
+									"port": "{{cat.cw.port}}",
+									"path": [
+										"crosswork",
+										"proxy",
+										"nso",
+										"restconf",
+										"data",
+										""
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Create:cnc7.l3vpnpolicy-tag-set-vpn-101",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"cisco-l3vpn-routing-policy:l3vpn-routing-policy\": {\n      \"defined-sets\": {\n        \"tag-sets\": {\n          \"tag-set\": [\n            {\n              \"name\": \"VPN-101-EXTCOMM-SET_C_4001\",\n              \"tag-value\": [4001]\n            },\n            {\n              \"name\": \"VPN-101-EXTCOMM-SET_C_4003\",\n              \"tag-value\": [4003]\n            }\n          ]\n        }\n      }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create:cnc7.l3vpnpolicy-dst-prefix-set-vpn-101",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\"cisco-l3vpn-routing-policy:l3vpn-routing-policy\": {\n    \"defined-sets\": {\n        \"prefix-sets\": {\n            \"dest-prefix-set\": [\n            {\n                \"name\": \"4001\",\n                \"mode\": \"ipv4\",\n                \"prefixes\": [\n                {\n                    \"prefix-list\": {\n                        \"ip-prefix\": \"30.2.1.0/24\"\n                    }\n                },\n                {\n                    \"prefix-list\": {\n                        \"ip-prefix\": \"30.2.2.0/24\"\n                    }\n                },\n                {\n                    \"prefix-list\": {\n                        \"ip-prefix\": \"30.2.3.0/24\"\n                    }\n                }\n                ]\n            },\n            {\n                \"name\": \"4003\",\n                \"mode\": \"ipv4\",\n                \"prefixes\": [\n                {\n                    \"prefix-list\": {\n                        \"ip-prefix\": \"30.1.1.0/24\"\n                    }\n                },\n                {\n                    \"prefix-list\": {\n                        \"ip-prefix\": \"30.1.2.0/24\"\n                    }\n                },\n                {\n                    \"prefix-list\": {\n                        \"ip-prefix\": \"30.1.3.0/24\"\n                    }\n                }\n                ]\n            }\n        ]\n        }\n    }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create:cnc7.l3vpnpolicy-vpn-101",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"cisco-l3vpn-routing-policy:l3vpn-routing-policy\": {\n    \"policy-definitions\": {\n      \"policy-definition\": [\n        {\n          \"name\": \"VPN-101-POLICY\",\n          \"statements\": {\n            \"statement\": [\n              {\n                \"name\": \"stmnt1\",\n                \"conditions\": {\n                    \"match-dest-prefix-set\": {\n                      \"prefix-set\": \"4001\"\n                    }\n                },\n                \"actions\": {\n                  \"bgp-actions\": {\n                    \"set-ext-community\": {\n                      \"ext-community-set-ref\": \"VPN-101-EXTCOMM-SET_C_4001\"\n                    }\n                  }\n                }\n              },\n              {\n                \"name\": \"stmnt2\",\n                \"conditions\": {\n                    \"match-dest-prefix-set\": {\n                      \"prefix-set\": \"4003\"\n                    }\n                },\n                \"actions\": {\n                  \"bgp-actions\": {\n                    \"set-ext-community\": {\n                      \"ext-community-set-ref\": \"VPN-101-EXTCOMM-SET_C_4003\"\n                    }\n                  }\n                }\n              }\n            ]\n          }\n        }\n      ]\n    }\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create:cnc7.l3vpn-vpn-profile-vpn-101",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"ietf-l3vpn-ntw:l3vpn-ntw\": {\n    \"vpn-profiles\": {\n      \"valid-provider-identifiers\": {\n        \"routing-profile-identifier\": [\n          {\n            \"id\": \"VPN-101-POLICY\"\n          }\n        ]\n      }\n    }\n  }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create:cnc7.l3vpn-vpn-101",
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"type": "text",
+								"value": "application/yang-data+json"
+							},
+							{
+								"key": "Accept",
+								"value": "application/yang-data+json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"ietf-l3vpn-ntw:l3vpn-ntw\": {\n        \"vpn-services\": {\n            \"vpn-service\": {\n                \"vpn-id\": \"vpn-101\",\n                \"vpn-nodes\": {\n                    \"vpn-node\": [\n                        {\n                            \"vpn-node-id\": \"node-3\",\n                            \"vpn-network-accesses\": {\n                                \"vpn-network-access\": [\n                                    {\n                                        \"id\": \"3-ac3\",\n                                        \"connection\": {\n                                            \"encapsulation\": {\n                                                \"type\": \"ietf-vpn-common:dot1q\",\n                                                \"dot1q\": {\n                                                    \"cvlan-id\": 101\n                                                }\n                                            }\n                                        },\n                                        \"interface-id\": \"GigabitEthernet0/0/0/9\",\n                                        \"ip-connection\": {\n                                            \"ipv4\": {\n                                                \"local-address\": \"30.1.3.1\",\n                                                \"prefix-length\": 24\n                                            }\n                                        },\n                                        \"routing-protocols\": {\n                                            \"routing-protocol\": [\n                                                {\n                                                    \"id\": \"0\",\n                                                    \"bgp\": {\n                                                        \"peer-as\": 65003,\n                                                        \"neighbor\": [\n                                                            \"30.1.3.2\"\n                                                        ],\n                                                        \"address-family\": \"ipv4\",\n                                                        \"redistribute-connected\": [\n                                                            {\n                                                                \"enable\": true,\n                                                                \"address-family\": \"ietf-vpn-common:ipv4\"\n                                                            }\n                                                        ],\n                                                        \"cisco-l3vpn-ntw:mpls-deactivation\": false\n                                                    },\n                                                    \"type\": \"ietf-vpn-common:bgp-routing\"\n                                                }\n                                            ]\n                                        }\n                                    }\n                                ]\n                            },\n                            \"active-vpn-instance-profiles\": {\n                                \"vpn-instance-profile\": [\n                                    {\n                                        \"profile-id\": \"default\",\n                                        \"address-family\": [\n                                            {\n                                                \"vpn-targets\": {\n                                                    \"vpn-policies\": {\n                                                        \"export-policy\": \"VPN-101-POLICY\"\n                                                    }\n                                                },\n                                                \"address-family\": \"ietf-vpn-common:ipv4\"\n                                            },\n                                            {\n                                                \"vpn-targets\": {\n                                                    \"vpn-policies\": {\n                                                        \"export-policy\": \"VPN-101-POLICY\"\n                                                    }\n                                                },\n                                                \"address-family\": \"ietf-vpn-common:ipv6\"\n                                            }\n                                        ]\n                                    }\n                                ]\n                            }\n                        },\n                        {\n                            \"vpn-node-id\": \"node-2\",\n                            \"vpn-network-accesses\": {\n                                \"vpn-network-access\": [\n                                    {\n                                        \"id\": \"2-ac2\",\n                                        \"connection\": {\n                                            \"encapsulation\": {\n                                                \"type\": \"ietf-vpn-common:dot1q\",\n                                                \"dot1q\": {\n                                                    \"cvlan-id\": 101\n                                                }\n                                            }\n                                        },\n                                        \"interface-id\": \"GigabitEthernet0/0/0/9\",\n                                        \"ip-connection\": {\n                                            \"ipv4\": {\n                                                \"local-address\": \"30.1.2.1\",\n                                                \"prefix-length\": 24\n                                            }\n                                        },\n                                        \"routing-protocols\": {\n                                            \"routing-protocol\": [\n                                                {\n                                                    \"id\": \"0\",\n                                                    \"bgp\": {\n                                                        \"peer-as\": 65003,\n                                                        \"neighbor\": [\n                                                            \"30.1.2.2\"\n                                                        ],\n                                                        \"address-family\": \"ipv4\",\n                                                        \"redistribute-connected\": [\n                                                            {\n                                                                \"enable\": true,\n                                                                \"address-family\": \"ietf-vpn-common:ipv4\"\n                                                            }\n                                                        ],\n                                                        \"cisco-l3vpn-ntw:mpls-deactivation\": false\n                                                    },\n                                                    \"type\": \"ietf-vpn-common:bgp-routing\"\n                                                }\n                                            ]\n                                        }\n                                    }\n                                ]\n                            },\n                            \"active-vpn-instance-profiles\": {\n                                \"vpn-instance-profile\": [\n                                    {\n                                        \"profile-id\": \"default\",\n                                        \"address-family\": [\n                                            {\n                                                \"vpn-targets\": {\n                                                    \"vpn-policies\": {\n                                                        \"export-policy\": \"VPN-101-POLICY\"\n                                                    }\n                                                },\n                                                \"address-family\": \"ietf-vpn-common:ipv4\"\n                                            },\n                                            {\n                                                \"vpn-targets\": {\n                                                    \"vpn-policies\": {\n                                                        \"export-policy\": \"VPN-101-POLICY\"\n                                                    }\n                                                },\n                                                \"address-family\": \"ietf-vpn-common:ipv6\"\n                                            }\n                                        ]\n                                    }\n                                ]\n                            }\n                        },\n                        {\n                            \"vpn-node-id\": \"node-1\",\n                            \"vpn-network-accesses\": {\n                                \"vpn-network-access\": [\n                                    {\n                                        \"id\": \"1-ac1\",\n                                        \"connection\": {\n                                            \"encapsulation\": {\n                                                \"type\": \"ietf-vpn-common:dot1q\",\n                                                \"dot1q\": {\n                                                    \"cvlan-id\": 101\n                                                }\n                                            }\n                                        },\n                                        \"interface-id\": \"GigabitEthernet0/0/0/9\",\n                                        \"ip-connection\": {\n                                            \"ipv4\": {\n                                                \"local-address\": \"30.1.1.1\",\n                                                \"prefix-length\": 24\n                                            }\n                                        },\n                                        \"routing-protocols\": {\n                                            \"routing-protocol\": [\n                                                {\n                                                    \"id\": \"0\",\n                                                    \"bgp\": {\n                                                        \"peer-as\": 65003,\n                                                        \"neighbor\": [\n                                                            \"30.1.1.2\"\n                                                        ],\n                                                        \"address-family\": \"ipv4\",\n                                                        \"redistribute-connected\": [\n                                                            {\n                                                                \"enable\": true,\n                                                                \"address-family\": \"ietf-vpn-common:ipv4\"\n                                                            }\n                                                        ],\n                                                        \"cisco-l3vpn-ntw:mpls-deactivation\": false\n                                                    },\n                                                    \"type\": \"ietf-vpn-common:bgp-routing\"\n                                                }\n                                            ]\n                                        }\n                                    }\n                                ]\n                            },\n                            \"active-vpn-instance-profiles\": {\n                                \"vpn-instance-profile\": [\n                                    {\n                                        \"profile-id\": \"default\",\n                                        \"address-family\": [\n                                            {\n                                                \"vpn-targets\": {\n                                                    \"vpn-policies\": {\n                                                        \"export-policy\": \"VPN-101-POLICY\"\n                                                    }\n                                                },\n                                                \"address-family\": \"ietf-vpn-common:ipv4\"\n                                            },\n                                            {\n                                                \"vpn-targets\": {\n                                                    \"vpn-policies\": {\n                                                        \"export-policy\": \"VPN-101-POLICY\"\n                                                    }\n                                                },\n                                                \"address-family\": \"ietf-vpn-common:ipv6\"\n                                            }\n                                        ]\n                                    }\n                                ]\n                            }\n                        }\n                    ]\n                },\n                \"vpn-service-topology\": \"ietf-vpn-common:any-to-any\",\n                \"vpn-instance-profiles\": {\n                    \"vpn-instance-profile\": [\n                        {\n                            \"profile-id\": \"default\"\n                        }\n                    ]\n                },\n                \"cisco-l3vpn-ntw:vpn-target\": {\n                    \"hub-rt-value\": \"0:101:101\"\n                },\n                \"cisco-l3vpn-ntw:service-assurance\": {\n                    \"rule-name\": \"Rule-L3VPN-NM system\",\n                    \"preservation\": \"remove\",\n                    \"profile-name\": \"Gold_L3VPN_ConfigProfile system\",\n                    \"monitoring-state\": \"disable\"\n                }\n            }\n        }\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/proxy/nso/restconf/data",
+							"protocol": "https",
+							"host": [
+								"{{cat.cw.host}}"
+							],
+							"port": "{{cat.cw.port}}",
+							"path": [
+								"crosswork",
+								"proxy",
+								"nso",
+								"restconf",
+								"data"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CAT resync",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/yang-data+json",
+						"disabled": true
+					},
+					{
+						"key": "Accept",
+						"value": "application/yang-data+json",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/cat/nso-connector/v1/api/fullResync",
+					"protocol": "https",
+					"host": [
+						"{{cat.cw.host}}"
+					],
+					"port": "{{cat.cw.port}}",
+					"path": [
+						"crosswork",
+						"cat",
+						"nso-connector",
+						"v1",
+						"api",
+						"fullResync"
+					],
+					"query": [
+						{
+							"key": "no-networking",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Set NSO Policy",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/yang-data+json",
+						"disabled": true
+					},
+					{
+						"key": "Accept",
+						"value": "application/yang-data+json",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"default\",\r\n    \"provider_policy\": {\r\n        \"nso201\": {\r\n            \"checkSync\": true,\r\n            \"checkSyncRule\": \"\",\r\n            \"match\": true,\r\n            \"matchRule\": \"\",\r\n            \"neds\": [\r\n                {\r\n                    \"ned\": \"cisco-ios-cli-6.74\",\r\n                    \"rule\": \"productinfo.softwaretype='IOS XE'\"\r\n                },\r\n                {\r\n                    \"ned\": \"cisco-iosxr-nc-7.3\",\r\n                    \"rule\": \"productinfo.softwaretype='IOS XR' and  productinfo.softwareversion>='7.3.*'\"\r\n                },\r\n                {\r\n                    \"ned\": \"cisco-iosxr-cli-7.33\",\r\n                    \"rule\": \"productinfo.softwaretype='IOS XR' \"\r\n                },\r\n                {\r\n                    \"ned\": \"cisco-nx-cli-5.21\",\r\n                    \"rule\": \"productinfo.softwaretype='NX-OS'\"\r\n                },\r\n                {\r\n                    \"ned\": \"juniper-junos-nc-4.11\",\r\n                    \"rule\": \"productinfo.softwaretype='JUNOS'\"\r\n                }\r\n            ],\r\n            \"onboardFromRule\": \"\",\r\n            \"onboardTo\": true,\r\n            \"onboardToRule\": \"\",\r\n            \"syncFrom\": true,\r\n            \"syncFromRule\": \"\"\r\n        }\r\n    },\r\n    \"providers_criteria\": \"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://{{cat.cw.host}}:{{cat.cw.port}}/crosswork/inventory/v1/nso/policy",
+					"protocol": "https",
+					"host": [
+						"{{cat.cw.host}}"
+					],
+					"port": "{{cat.cw.port}}",
+					"path": [
+						"crosswork",
+						"inventory",
+						"v1",
+						"nso",
+						"policy"
+					],
+					"query": [
+						{
+							"key": "no-networking",
+							"value": null,
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{cat.cw.api.jwt}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "cat.cw.host",
+			"value": "198.18.134.219"
+		},
+		{
+			"key": "cat.cw.port",
+			"value": "30603"
+		},
+		{
+			"key": "cat.cw.user",
+			"value": "admin"
+		},
+		{
+			"key": "cat.cw.password",
+			"value": "cRo55work!"
+		}
+	]
+}
